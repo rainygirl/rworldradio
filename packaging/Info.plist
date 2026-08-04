@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleName</key>
+	<string>R World Radio</string>
+	<key>CFBundleDisplayName</key>
+	<string>R World Radio</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.rworldradio.RWorldRadio</string>
+	<key>CFBundleExecutable</key>
+	<string>rworldradio</string>
+	<key>CFBundleIconFile</key>
+	<string>rworldradio</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.music</string>
+	<!-- The oldest macOS the toolchain's dependencies still support; the arm64
+	     slice needs 11.0 regardless, this only widens the Intel side. -->
+	<key>LSMinimumSystemVersion</key>
+	<string>10.15</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<!-- The GUI is idle unless something is playing, so let macOS keep it on the
+	     integrated GPU. -->
+	<key>NSSupportsAutomaticGraphicsSwitching</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>MIT licensed. Station data from radio-browser.</string>
+</dict>
+</plist>
