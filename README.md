@@ -1,5 +1,7 @@
 # R World Radio - macOS port (Rust)
 
+[한국어 README](README.ko.md)
+
 Internet radio player for macOS, ported from the Haiku/BeAPI original (see the
 [`rworldradio-linux`](https://github.com/rainygirl/rworldradio-linux) repository
 for that and for the Linux port). Reads a pre-built, bundled station dataset

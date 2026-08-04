@@ -1,5 +1,7 @@
 # R World Radio - macOS 포팅 (Rust)
 
+[English README](README.md)
+
 macOS용 인터넷 라디오 플레이어로, Haiku/BeAPI 원본을 포팅한 것입니다(원본과 Linux
 포팅은 [`rworldradio-linux`](https://github.com/rainygirl/rworldradio-linux)
 저장소 참고). 미리 만들어져 함께 배포되는 방송국 데이터셋(`data/`)을 읽어 국가별로
