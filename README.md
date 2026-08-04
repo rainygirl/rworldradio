@@ -7,6 +7,8 @@ for that and for the Linux port). Reads a pre-built, bundled station dataset
 double-click it - no external player process, and no network access at all except
 to actually stream audio.
 
+![R World Radio running on macOS](screenshot.png)
+
 ## Why this is a thin directory
 
 Almost none of a port like this is actually platform-specific. The dataset
