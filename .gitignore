@@ -1,0 +1,16 @@
+# Visual Studio / MSBuild output
+[Bb]in/
+[Oo]bj/
+AppPackages/
+BundleArtifacts/
+*.user
+*.suo
+.vs/
+
+# Signing material - never commit a test certificate's private key
+*.pfx
+
+.DS_Store
+
+# Signed sideload package is kept in dist/ deliberately (see README), but the
+# build's own output directory is not.

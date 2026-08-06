@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  IgnorableNamespaces="uap mp">
+
+  <Identity Name="RWorldRadio"
+            Publisher="CN=RWorldRadio"
+            Version="1.0.0.0" />
+
+  <!-- Required for Windows 10 Mobile deployment; the GUID must stay stable
+       across builds or the phone treats each install as a different app. -->
+  <mp:PhoneIdentity PhoneProductId="6f4a2c18-9d3b-4f21-8c7a-1e5d0b93a742"
+                    PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+
+  <Properties>
+    <DisplayName>R World Radio</DisplayName>
+    <PublisherDisplayName>R World Radio</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <!-- 10586 = Windows 10 Mobile 1511, the oldest build this was tested on.
+         MSBuild rewrites MinVersion from TargetPlatformMinVersion in the .csproj,
+         so that file is the one to edit - this value is kept in sync only so the
+         manifest reads correctly on its own. -->
+    <TargetDeviceFamily Name="Windows.Universal"
+                        MinVersion="10.0.10586.0"
+                        MaxVersionTested="10.0.15063.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate"/>
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+                 Executable="$targetnametoken$.exe"
+                 EntryPoint="RWorldRadio.App">
+      <uap:VisualElements
+        DisplayName="R World Radio"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png"
+        Description="Internet radio player"
+        BackgroundColor="black">
+        <uap:DefaultTile Square71x71Logo="Assets\Square71x71Logo.png"/>
+        <!-- The splash image has a transparent background, so this colour is what
+             shows behind the radio. Kept black deliberately. -->
+        <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="black" />
+      </uap:VisualElements>
+
+      <Extensions>
+        <!-- Required for playback to continue when the screen turns off. Without
+             this declaration the OS stops the audio the moment the app leaves the
+             foreground, and setting MediaElement.AudioCategory without it makes the
+             OS terminate the app instead.
+
+             EntryPoint is mandatory (the validator rejects the extension without
+             it: APPX0501 / error 80080204) and must name the IBackgroundTask class
+             that owns the player - see BackgroundAudio/AudioTask.cs. Naming the App
+             class instead compiles and installs, but the audio then still belongs to
+             the foreground view and stops when the screen turns off. -->
+        <Extension Category="windows.backgroundTasks" EntryPoint="RWorldRadio.BackgroundAudio.AudioTask">
+          <BackgroundTasks>
+            <Task Type="audio" />
+          </BackgroundTasks>
+        </Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <!-- The only capability needed: fetching the audio stream. The station list
+         ships inside the package, so no file-system access is required. -->
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>
