@@ -26,6 +26,7 @@ What genuinely differs, and is therefore all that lives in this crate:
 |---|---|
 | `src/paths.rs` | Dataset search order: the `.app` bundle's `Contents/Resources`, then `~/Library/Application Support/RWorldRadio` - instead of XDG's `~/.local/share` and `/usr/share`. |
 | `src/fonts.rs` | Hiragino / Apple SD Gothic Neo / PingFang / Arial Unicode, layered by script. macOS has no fontconfig to ask and no single font covering all of CJK. |
+| `src/mediakeys.rs` | The F8 play/pause key. It never reaches the window as a key event - macOS routes it through MediaPlayer's `MPRemoteCommandCenter` to whichever app last published Now Playing state. |
 | `src/main.rs` | Cmd+Q and Cmd+W. winit creates no `NSMenu`, so without this the standard quit shortcut does nothing. |
 | `packaging/`, `install.sh` | `.app` bundle, `Info.plist`, `.icns` - instead of a `.desktop` file and hicolor PNGs. |
 
@@ -33,7 +34,7 @@ Everything else is in `core/`, which is a verbatim copy of the Linux port's crat
 see [`core/VENDORED.md`](core/VENDORED.md) for how to re-sync it and what in there
 this repository doesn't use.
 
-That split is deliberate: it keeps the macOS-specific surface down to three small
+That split is deliberate: it keeps the macOS-specific surface down to four small
 files. The trade-off of vendoring is that a fix in `core/` has to be made in the
 Linux repository and re-copied here, rather than being picked up automatically.
 
@@ -101,6 +102,9 @@ cd core/packaging && python3 make-icons.py --icns ../../packaging/rworldradio.ic
 - The ■ button appears only while something is playing.
 - The LED bar is the peak level of the audio actually being played.
 - Hover a station for its codec, bitrate, language, coordinates and stream URL.
+- F8 (the play/pause media key) toggles playback, as do the Control Centre and
+  headphone transport controls. With nothing selected it does nothing - there is
+  no sensible default station in a 51k-station list.
 - Cmd+Q or Cmd+W quits.
 
 ## Stream support and limitations
@@ -154,6 +158,8 @@ Built and run on macOS 15 (Apple silicon, arm64):
   the level meter tracking it. Japanese and Korean station names render.
 - `play_stream` verified both stream paths through CoreAudio: a progressive MP3
   station (peak 0.228) and an HLS/packed-ADTS-AAC station (peak 0.439).
+- The F8 media key starts and stops the selected station from the installed
+  bundle.
 
 Not verified: Intel (x86_64) macOS, and the `--universal` build - there is no
 architecture-specific code, but neither has been run.

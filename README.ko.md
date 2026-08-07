@@ -24,6 +24,7 @@ HTTP/TLS, HLS 파이프라인, MPEG-TS 디먹서, ADTS 정규화, symphonia 디�
 |---|---|
 | `src/paths.rs` | 데이터셋 탐색 순서: XDG의 `~/.local/share`와 `/usr/share` 대신 `.app` 번들의 `Contents/Resources`, 그다음 `~/Library/Application Support/RWorldRadio`. |
 | `src/fonts.rs` | Hiragino / Apple SD Gothic Neo / PingFang / Arial Unicode를 문자 체계별로 계층 구성. macOS에는 질의할 fontconfig가 없고 CJK 전체를 커버하는 단일 폰트도 없습니다. |
+| `src/mediakeys.rs` | F8 재생/정지 키. 이 키는 키 이벤트로 창에 전달되지 않고, macOS가 MediaPlayer의 `MPRemoteCommandCenter`를 통해 가장 최근에 Now Playing 상태를 발행한 앱으로 보냅니다. |
 | `src/main.rs` | Cmd+Q와 Cmd+W. winit은 `NSMenu`를 만들지 않으므로, 이게 없으면 표준 종료 단축키가 아무 동작도 하지 않습니다. |
 | `packaging/`, `install.sh` | `.desktop` 파일과 hicolor PNG 대신 `.app` 번들, `Info.plist`, `.icns`. |
 
@@ -31,7 +32,7 @@ HTTP/TLS, HLS 파이프라인, MPEG-TS 디먹서, ADTS 정규화, symphonia 디�
 재동기화 방법과 그중 이 저장소가 쓰지 않는 부분은
 [`core/VENDORED.md`](core/VENDORED.md)를 참고하세요.
 
-이 분리는 의도적입니다. macOS 종속 영역을 작은 파일 세 개로 억제해 줍니다. 벤더링의
+이 분리는 의도적입니다. macOS 종속 영역을 작은 파일 네 개로 억제해 줍니다. 벤더링의
 트레이드오프는 `core/`의 수정이 자동으로 반영되지 않고, Linux 저장소에서 고친 뒤 다시
 복사해 와야 한다는 점입니다.
 
@@ -97,6 +98,9 @@ cd core/packaging && python3 make-icons.py --icns ../../packaging/rworldradio.ic
 - ■ 버튼은 재생 중일 때만 나타납니다.
 - LED 바는 실제로 재생되고 있는 오디오의 피크 레벨입니다.
 - 방송국에 마우스를 올리면 코덱, 비트레이트, 언어, 좌표, 스트림 URL이 보입니다.
+- F8(재생/정지 미디어 키)로 재생을 토글합니다. 제어 센터와 헤드폰의 재생 컨트롤도
+  같습니다. 선택된 방송국이 없으면 아무 동작도 하지 않습니다 - 5만 개가 넘는
+  목록에서 기본으로 삼을 만한 방송국이 없기 때문입니다.
 - Cmd+Q 또는 Cmd+W로 종료합니다.
 
 ## 스트림 지원 범위와 한계
@@ -148,6 +152,7 @@ macOS 15(Apple silicon, arm64)에서 빌드 및 실행:
   414kbps). 일본어와 한국어 방송국 이름이 렌더링됨.
 - `play_stream`으로 두 스트림 경로를 CoreAudio에서 검증: 프로그레시브 MP3
   방송국(피크 0.228)과 HLS/packed-ADTS-AAC 방송국(피크 0.439).
+- 설치된 번들에서 F8 미디어 키로 선택한 방송국의 재생과 정지가 동작함.
 
 검증되지 않은 것: Intel(x86_64) macOS와 `--universal` 빌드. 아키텍처에 종속된 코드는
 없지만, 둘 다 실행해 보지는 않았습니다.
