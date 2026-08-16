@@ -21,34 +21,13 @@
 #include "paths.h"
 #include "ui.h"
 
-/* Carbon has no menu bar unless the app makes one, and without a menu bar Cmd+Q
- * does nothing - which on Mac OS X reads as the app being broken. The first menu
- * inserted becomes the application menu, whose title the system replaces with
- * the bundle name. */
-static void install_menu_bar(void)
-{
-    MenuRef application = NULL;
-    MenuRef file = NULL;
-
-    ClearMenuBar();
-
-    if (CreateNewMenu(128, 0, &application) == noErr) {
-        SetMenuTitleWithCFString(application, CFSTR("R World Radio"));
-        AppendMenuItemTextWithCFString(application, CFSTR("Quit R World Radio"),
-                                       0, kHICommandQuit, NULL);
-        SetMenuItemCommandKey(application, 1, false, 'q');
-        InsertMenu(application, 0);
-    }
-
-    if (CreateNewMenu(129, 0, &file) == noErr) {
-        SetMenuTitleWithCFString(file, CFSTR("File"));
-        AppendMenuItemTextWithCFString(file, CFSTR("Close"), 0, kHICommandClose, NULL);
-        SetMenuItemCommandKey(file, 1, false, 'w');
-        InsertMenu(file, 0);
-    }
-
-    DrawMenuBar();
-}
+/* No menu bar is installed here on purpose. The bold application menu - Services,
+ * Hide, Show All and Quit - is built by the system for every GUI process. A menu
+ * the app inserts itself does not become that menu, it lands beside it, which is
+ * why an earlier version showed "R World Radio" twice with a File menu after it.
+ * Nothing here needs a menu of its own: the window has a close box, and
+ * Quit (Cmd+Q) arrives as kHICommandQuit, which RunApplicationEventLoop
+ * already handles. */
 
 int main(int argc, char **argv)
 {
@@ -64,7 +43,6 @@ int main(int argc, char **argv)
     paths_find_data_file("cacert.der", ca_store, sizeof(ca_store));
     net_init(ca_store);
 
-    install_menu_bar();
     /* Only matters when running outside a bundle - an installed .app already has
      * its icon from Info.plist. See src/icon.h. */
     icon_apply_to_dock();
