@@ -2,7 +2,7 @@
 name = "rworldradio-mac"
 version = "1.0.0"
 edition = "2021"
-# Set by the shared crate's dependency tree, not by this code - see core/.
+# Set by the shared crate's dependency tree, not by this code - see ../shared/core.
 rust-version = "1.88"
 description = "Internet radio player - macOS port of the Haiku R World Radio app"
 license = "MIT"
@@ -14,12 +14,12 @@ path = "src/main.rs"
 [dependencies]
 # The whole implementation - dataset parsing, HTTP, HLS, the TS demuxer, the ADTS
 # normalizer, decoding, audio output and the UI - is shared with the Linux port and
-# vendored in core/ (see core/VENDORED.md). Only what is genuinely
-# platform-specific lives in this crate: where `data/` is looked for, which system
-# fonts to fall back to, the media-key wiring, and the window/app-bundle setup.
-# `default-features = false` drops the Linux windowing features, which are inert on
-# macOS but shouldn't be requested here.
-rworldradio = { path = "core", default-features = false }
+# lives in ../shared/core. Only what is genuinely platform-specific lives in this
+# crate: where `data/` is looked for, which system fonts to fall back to, the
+# media-key wiring, and the window/app-bundle setup. `default-features = false`
+# drops the Linux windowing features, which are inert on macOS but shouldn't be
+# requested here.
+rworldradio = { path = "../shared/core", default-features = false }
 
 eframe = { version = "0.32", default-features = false, features = [
     "glow",

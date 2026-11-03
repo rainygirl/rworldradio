@@ -75,7 +75,7 @@ mod tests {
             "missing Application Support path in {rendered:?}"
         );
         assert!(
-            rendered.iter().any(|p| p.ends_with("../data") || p.ends_with("data")),
+            rendered.iter().any(|p| p.ends_with("../shared/data") || p.ends_with("data")),
             "missing relative fallback in {rendered:?}"
         );
     }
@@ -90,9 +90,9 @@ mod tests {
     /// what `cargo run` does. Skipped if `data/` isn't present.
     #[test]
     fn finds_the_checkout_dataset() {
-        let repo_data = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("data");
+        let repo_data = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../shared/data");
         if !repo_data.join("countries.json").is_file() {
-            eprintln!("skipping: data/ not present");
+            eprintln!("skipping: shared/data/ not present");
             return;
         }
         let loaded = load_dataset().expect("dataset should be found from the checkout");

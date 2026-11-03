@@ -27,7 +27,10 @@ translated to C#, is the part that was hard to get right:
 - **`Services/StationCatalog.cs`** - tolerant dataset parsing (radio-browser
   sometimes sends a number as a string and vice versa; a corrupt country file is
   skipped, not fatal).
-- **`Assets/data/`** - the station list, byte-identical to the desktop one.
+- **`Assets/data/`** - the station list. It is not a copy: the `.csproj` lists
+  every file of the repository's `../shared/data` as `<Content>` with a `<Link>`
+  under `Assets\data`, so the package layout is unchanged and the list is the
+  same bytes every port ships.
 
 Everything *below* HTTP is deliberately **not** ported. Windows decodes MP3 and AAC
 natively and handles HLS, so the desktop builds' HLS worker, MPEG-TS demuxer, ADTS
@@ -292,11 +295,14 @@ Keep this. It is the only diagnostic channel on the device.
 
 ## The `<Content Include>` list
 
-The .csproj lists all 289 dataset files individually so they ship in the package.
-If `tools/update_stations_db.py` (in the Linux repo) adds or removes country files,
-that list must be regenerated or the new files will not be packaged. The current
-list was confirmed correct: the built package carries exactly 288 country files
-plus the index.
+The .csproj lists all 289 dataset files individually, as
+`<Content Include="..\shared\data\countries\<slug>.json"><Link>Assets\data\countries\<slug>.json</Link></Content>`,
+so they ship in the package under `Assets\data`. If
+`../shared/tools/update_stations_db.py` adds or removes country files, that list
+must be regenerated or the new files will not be packaged. The list before the
+move was confirmed correct: the built package carried exactly 288 country files
+plus the index. The `<Link>` form has not been built since - it is standard
+MSBuild, but the next Windows build should check the package contents again.
 
 ## Build environment that was actually used
 

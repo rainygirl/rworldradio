@@ -16,7 +16,7 @@ set -e
 
 cd "$(dirname "$0")"
 PROJECT_DIR=$PWD
-DATA_SRC="$PROJECT_DIR/data"
+DATA_SRC="$PROJECT_DIR/../shared/data"
 BUILD_DIR="$PROJECT_DIR/build"
 APP_NAME="RWorldRadio.app"
 

@@ -239,16 +239,18 @@ bundle: $(BINARY) $(ICNS) data/stations.dat data/cacert.der
 
 # --------------------------------------------------------------------- data --
 
-# The JSON station dataset, which lives in this repository under data/. It is
-# converted to the flat binary the app mmap's - see tools/mkdataset.py for why
-# that happens at build time rather than at every launch. Point DATASET_SRC
+# The JSON station dataset, which lives in this repository under ../shared/data.
+# It is converted to the flat binary the app mmap's - see tools/mkdataset.py for
+# why that happens at build time rather than at every launch. Point DATASET_SRC
 # somewhere else to build from a different or newer dump.
-DATASET_SRC ?= data
+DATASET_SRC ?= ../shared/data
 
 dataset:
+	@mkdir -p data
 	tools/mkdataset.py $(DATASET_SRC) data/stations.dat
 
 castore:
+	@mkdir -p data
 	tools/mkcastore.py
 
 icns: $(ICNS)

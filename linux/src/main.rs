@@ -1,5 +1,5 @@
-//! Window setup and entry point. Everything else lives in the library (see
-//! `src/lib.rs` for how the Haiku kits map onto the crates used here).
+//! Window setup and entry point. Everything else lives in the shared crate (see
+//! `../shared/core/src/lib.rs` for how the Haiku kits map onto the crates used here).
 
 use rworldradio::{fonts, icon, ui};
 

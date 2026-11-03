@@ -1,0 +1,6 @@
+.DS_Store
+__pycache__/
+*~
+*.swp
+# Claude Code's per-user settings: a local permission allowlist with absolute paths.
+.claude/settings.local.json

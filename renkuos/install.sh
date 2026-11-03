@@ -39,7 +39,7 @@ fi
 
 PROJECT_DIR=$PWD
 BINARY="$PROJECT_DIR/$BINARY"
-DATA_DIR="$PROJECT_DIR/data"
+DATA_DIR="$(cd "$PROJECT_DIR/../shared/data" && pwd)"
 DESKBAR_APPS_DIR=/boot/system/non-packaged/data/deskbar/menu/Applications
 
 mkdir -p "$DESKBAR_APPS_DIR"

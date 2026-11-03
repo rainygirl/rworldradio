@@ -21,8 +21,8 @@ ReadFile(const std::string& path)
 
 int main()
 {
-	std::string indexJson = ReadFile("../data/countries.json");
-	assert(!indexJson.empty() && "run from test/, and generate data/ first");
+	std::string indexJson = ReadFile("../../shared/data/countries.json");
+	assert(!indexJson.empty() && "run from test/; the dataset is ../../shared/data");
 
 	auto countries = DataSetRepository::ParseCountryIndex(indexJson);
 	assert(!countries.empty());
@@ -33,7 +33,7 @@ int main()
 		if (entry.name != "Germany")
 			continue;
 		foundGermany = true;
-		std::string stationsJson = ReadFile("../data/countries/" + entry.file);
+		std::string stationsJson = ReadFile("../../shared/data/countries/" + entry.file);
 		auto stations = DataSetRepository::ParseCountryStations(stationsJson, entry.name);
 		assert(static_cast<int>(stations.size()) == entry.count);
 		assert(!stations.empty());

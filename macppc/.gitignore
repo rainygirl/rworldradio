@@ -23,9 +23,6 @@ vendor/mbedtls-*/
 vendor/libmad-*/
 vendor/faad2-*/
 
-# Engineering notes, kept local and not published.
-AGENTS.md
-
 .DS_Store
 *.o
 *.a

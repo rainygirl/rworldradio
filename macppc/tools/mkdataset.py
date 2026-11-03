@@ -24,7 +24,7 @@ Layout, all offsets from the start of the file:
     strings     NUL-terminated UTF-8, deduplicated
 
 Usage:
-    tools/mkdataset.py ../rworldradio-mac/data data/stations.dat
+    tools/mkdataset.py ../shared/data data/stations.dat
 """
 
 import json

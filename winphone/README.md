@@ -1,14 +1,11 @@
-# R World Radio - Windows 10 Mobile
+# R World Radio for Windows 10 Mobile
 
-*[한국어 버전](README.ko.md)*
-
-Internet radio player for Windows 10 Mobile (Windows Phone 10). Pick a country,
-pick a station, it plays - about 51,000 stations across 229 countries, from a
-station list that ships inside the app. 
-
-Tested on a Nokia Lumia 920 running Windows 10 Mobile 10586.
+English · [한국어](README.ko.md)
 
 <img src="screenshot.png" alt="R World Radio on a Lumia 920" width="320">
+
+Internet radio player for Windows 10 Mobile (Windows Phone 10). Tested on a
+Nokia Lumia 920 running Windows 10 Mobile 10586.
 
 ## Installing on a phone
 
@@ -38,12 +35,9 @@ That is what a phone does when the package requires a newer OS than it has. Chec
 the phone's build number under **Settings → About → More info**. This package
 requires 10586 or newer.
 
-### The tools that do not work
-
-For anyone who tries the documented routes: `WinAppDeployCmd`, Device Portal over
-USB, and Visual Studio's F5 deployment all need the `IpOverUsb` service, which
-Microsoft no longer ships. Copying the files to the phone is the way. (Device
-Portal over Wi-Fi should still work if you enable it on the phone.)
+`WinAppDeployCmd`, Device Portal over USB and Visual Studio's F5 deployment all
+need a service Microsoft no longer ships; copying the files to the phone is the
+way. See [AGENTS.md](AGENTS.md).
 
 ## Building it yourself
 
@@ -73,8 +67,10 @@ $cert = New-SelfSignedCertificate -Type Custom -Subject "CN=RWorldRadio" `
 $cert.Thumbprint
 ```
 
-**3. Build and package.** Sign by *thumbprint*, not by `.pfx` file - MSBuild's key
-file import fails with `APPX0105` even when the password is correct.
+**3. Build and package.** From this directory, with the whole repository checked
+out (the station list is read from `..\shared\data`). Sign by *thumbprint*, not
+by `.pfx` file - MSBuild's key file import fails with `APPX0105` even when the
+password is correct.
 
 ```powershell
 $msbuild = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe"
@@ -103,24 +99,14 @@ time, several of which only show up on the device and not at build time.
 
 ## Keeping the station list current
 
-The list is fixed at build time. To refresh it you need to rebuild - see
-[AGENTS.md](AGENTS.md) and the dataset tool in the Linux repository.
-
-## What is not supported
-
-- **Opus streams do not play.** MP3, AAC, HLS and Ogg/Vorbis do.
-- **Encrypted HLS streams (`#EXT-X-KEY`) do not play.**
-- Some stations are dead, refuse connections from anything that is not a browser,
-  or are restricted to their own country.
-
-## Station list source
-
-- [radio-browser](https://www.radio-browser.info/)
+The list is fixed at build time. To refresh it, run
+`python3 ../shared/tools/update_stations_db.py` and rebuild - see
+[AGENTS.md](AGENTS.md) about the `.csproj` file list.
 
 ## License
 
 MIT - see [LICENSE](LICENSE).
 
-## AI Disclaimer
+## AI disclosure
 
-This application was produced by a human working with Claude.
+Claude was used in the development of this program.

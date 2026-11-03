@@ -41,6 +41,12 @@ CandidateDataDirs()
 			BPath projectDir;
 			execDir.GetParent(&projectDir);
 			candidates.push_back(std::string(projectDir.Path()) + "/data");
+
+			// The combined repository keeps the dataset in shared/data, a
+			// sibling of this port's directory.
+			BPath repoDir;
+			projectDir.GetParent(&repoDir);
+			candidates.push_back(std::string(repoDir.Path()) + "/shared/data");
 		}
 	}
 
@@ -48,6 +54,7 @@ CandidateDataDirs()
 	if (find_directory(B_USER_NONPACKAGED_DATA_DIRECTORY, &nonPackagedData) == B_OK)
 		candidates.push_back(std::string(nonPackagedData.Path()) + "/RWorldRadio");
 
+	candidates.push_back("../shared/data");
 	candidates.push_back("data");
 	return candidates;
 }

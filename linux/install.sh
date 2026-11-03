@@ -20,7 +20,7 @@ set -e
 
 cd "$(dirname "$0")"
 PROJECT_DIR=$PWD
-DATA_SRC="$PROJECT_DIR/data"
+DATA_SRC="$PROJECT_DIR/../shared/data"
 
 MODE=install
 SCOPE=user
@@ -107,7 +107,7 @@ sed "s|^Exec=rworldradio$|Exec=$BIN_DIR/rworldradio|" \
 chmod 644 "$APPS_DIR/rworldradio.desktop"
 for size in $ICON_SIZES; do
 	mkdir -p "$ICONS_DIR/${size}x${size}/apps"
-	install -m 644 "packaging/rworldradio-${size}.png" \
+	install -m 644 "../shared/core/packaging/rworldradio-${size}.png" \
 		"$ICONS_DIR/${size}x${size}/apps/rworldradio.png"
 done
 
