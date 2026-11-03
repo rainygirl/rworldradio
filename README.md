@@ -29,6 +29,7 @@ So this port splits the work:
 | `/search?q=TEXT` | `id\|enc\|name\|codec\|bitrate\|country` (up to 200) |
 | `/play?id=ID` | ICY MP3 stream (one transcode at a time) |
 | `/kexp` | ICY pass-through of an existing KEXP MP3 relay on `:8082` |
+| `/now` | `V 1` / `PLAYING 0\|1` / `STATION name` / `TITLE artist - song` (UTF-8 lines) for the Home View screen saver: the stream the Mac has open, with the KEXP API or the station's ICY StreamTitle. `?src=kexp` answers the KEXP track even with no stream open (Tiger, which plays KEXP in iTunes) |
 | `/health` | JSON |
 
 Lines end with CR. `enc` is `K` (Mac Korean / EUC-KR bytes) or `R` (Mac Roman).

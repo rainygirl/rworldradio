@@ -10,6 +10,8 @@ This relay does the hard parts:
   GET /search?q=TEXT             id|enc|name|codec|bitrate|country
   GET /play?id=ID                ICY MP3 stream (ffmpeg -> 128k MP3)
   GET /kexp                      ICY passthrough of the KEXP relay on :8082
+  GET /now[?src=kexp]            what the Mac is playing (UTF-8, for Home View);
+                                 src=kexp: the KEXP track even with no stream open
   GET /health                    JSON
 
 Text lines are encoded for the Mac: enc K = Mac Korean (EUC-KR) bytes,
@@ -34,6 +36,76 @@ COUNTRIES = []          # (name, [station dict])
 STATIONS = []           # flat list, index = id
 _play_lock = threading.Lock()
 _current = {"proc": None, "id": None, "started": 0}
+KEXP_NAME = "KEXP 90.3 FM / Seattle"
+KEXP_PLAYS = "https://api.kexp.org/v2/plays/?format=json&limit=1"
+# What the Mac is listening to: one entry per open stream, newest last.
+_listeners = []
+_listen_lock = threading.Lock()
+_title = {"key": None, "text": "", "at": 0}
+
+
+def kexp_title():
+    with urllib.request.urlopen(urllib.request.Request(KEXP_PLAYS, headers={"User-Agent": "rworldradio-relay"}), timeout=8) as r:
+        play = (json.load(r).get("results") or [{}])[0]
+    if play.get("play_type") == "trackplay":
+        artist, song = play.get("artist") or "", play.get("song") or ""
+        return " - ".join(x for x in (artist, song) if x)
+    return "Air break" if play.get("play_type") == "airbreak" else ""
+
+
+def icy_title(url):
+    """StreamTitle from one Shoutcast/Icecast metadata block, or ''."""
+    req = urllib.request.Request(url, headers={"Icy-MetaData": "1", "User-Agent": "Mozilla/5.0"})
+    with urllib.request.urlopen(req, timeout=8) as r:
+        metaint = int(r.headers.get("icy-metaint") or 0)
+        if not metaint:
+            return ""
+        left = metaint
+        while left > 0:
+            b = r.read(min(left, 16384))
+            if not b:
+                return ""
+            left -= len(b)
+        n = r.read(1)
+        meta = r.read(n[0] * 16) if n else b""
+    raw = meta.split(b"StreamTitle='", 1)[1].split(b"';", 1)[0] if b"StreamTitle='" in meta else b""
+    for enc in ("utf-8", "cp949", "latin-1"):
+        try:
+            return raw.decode(enc).strip()
+        except UnicodeDecodeError:
+            pass
+    return ""
+
+
+def now_playing(force_kexp=False):
+    with _listen_lock:
+        cur = _listeners[-1] if _listeners else None
+    if not cur and force_kexp:     # Tiger plays KEXP itself and only wants the track
+        cur = {"key": "kexp", "name": KEXP_NAME, "url": None}
+    if not cur:
+        return None, ""
+    key = cur["key"]
+    if _title["key"] != key or time.time() - _title["at"] > 20:
+        try:
+            text = kexp_title() if key == "kexp" else icy_title(cur["url"])
+        except Exception as exc:
+            sys.stderr.write("now: %s\n" % exc)
+            text = _title["text"] if _title["key"] == key else ""
+        _title.update(key=key, text=text, at=time.time())
+    return cur["name"], _title["text"]
+
+
+class Listening:
+    def __init__(self, key, name, url=None):
+        self.entry = {"key": key, "name": name, "url": url}
+
+    def __enter__(self):
+        with _listen_lock:
+            _listeners.append(self.entry)
+
+    def __exit__(self, *exc):
+        with _listen_lock:
+            _listeners.remove(self.entry)
 
 
 def mac_text(s):
@@ -112,6 +184,16 @@ class Handler(BaseHTTPRequestHandler):
                                "playing": _current["id"], "since": _current["started"]}).encode()
             self.send_response(200); self.send_header("Content-Type", "application/json")
             self.end_headers(); self.wfile.write(body); return
+        if path == "/now":
+            name, title = now_playing(q.get("src", [""])[0] == "kexp")
+            body = ("V 1\nPLAYING %d\nSTATION %s\nTITLE %s\n" % (
+                1 if name else 0, " ".join((name or "").split()), " ".join(title.split()))).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if path == "/countries":
             self.text([b"%d|%s|%s|%d" % (i, mac_text(n)[0].encode(), mac_text(n)[1], len(rows))
                        for i, (n, rows) in enumerate(COUNTRIES)])
@@ -133,7 +215,7 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/kexp":
             self.icy("KEXP 90.3 FM")
             try:
-                with urllib.request.urlopen(KEXP_SOURCE, timeout=15) as r:
+                with Listening("kexp", KEXP_NAME), urllib.request.urlopen(KEXP_SOURCE, timeout=15) as r:
                     while True:
                         b = r.read(8192)
                         if not b:
@@ -175,11 +257,12 @@ class Handler(BaseHTTPRequestHandler):
             self.icy(s["name"])
             self.wfile.write(first)
             try:
-                while True:
-                    b = proc.stdout.read(4096)
-                    if not b:
-                        break
-                    self.wfile.write(b)
+                with Listening(s["id"], " ".join(s["name"].split()), s["url"]):
+                    while True:
+                        b = proc.stdout.read(4096)
+                        if not b:
+                            break
+                        self.wfile.write(b)
             except Exception as exc:
                 sys.stderr.write("play client ended: %s\n" % exc)
             finally:
