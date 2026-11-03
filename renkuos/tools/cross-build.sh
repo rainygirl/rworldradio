@@ -28,13 +28,16 @@ x86_64)
 	# The image has Haiku's private headers and static kits but no Haiku
 	# OpenSSL, so the HaikuPorts openssl3 packages are fetched and extracted.
 	SSL_URL=https://eu.hpkg.haiku-os.org/haikuports/master/x86_64/current/packages
-	SSL_VERSION="${SSL_VERSION:-3.5.8-2}"
+	# HaikuPorts keeps only the current build of each package; when this 404s,
+	# look up the version in the repository index and pass SSL_VERSION=.
+	SSL_VERSION="${SSL_VERSION:-3.5.9-1}"
 	( cd "$HERE" && tar cf - src ) \
 		| docker run --rm -i --platform linux/amd64 haiku/cross-compiler:x86_64-r1beta4 sh -c "
 			set -e
 			mkdir -p /work/ssl && cd /work && tar xf -
 			for p in openssl3 openssl3_devel; do
-				wget -q -O \$p.hpkg $SSL_URL/\$p-$SSL_VERSION-x86_64.hpkg
+				wget -q -O \$p.hpkg $SSL_URL/\$p-$SSL_VERSION-x86_64.hpkg \\
+					|| { echo \"cross-build: no \$p-$SSL_VERSION on HaikuPorts; set SSL_VERSION\" >&2; exit 1; }
 				package extract -C /work/ssl \$p.hpkg
 			done
 			D=/system/develop
