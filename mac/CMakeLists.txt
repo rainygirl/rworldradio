@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.10)
+project(RWorldRadio C)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -Wall -Wno-multichar -Wno-unused-function -Wno-pointer-sign")
+add_application(RWorldRadio main.c RWorldRadio.r TYPE APPL CREATOR RWRd)
+target_link_libraries(RWorldRadio QuickTimeLib URLAccessLib MenusLib)

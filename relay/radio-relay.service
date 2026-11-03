@@ -1,0 +1,13 @@
+[Unit]
+Description=R WorldRadio relay for Mac OS 9 (ICY MP3 via ffmpeg)
+After=network-online.target kexp-relay.service
+
+[Service]
+User=rainygirl
+WorkingDirectory=/home/rainygirl/Workspace/robot/tiger/radio
+ExecStart=/usr/bin/python3 /home/rainygirl/Workspace/robot/tiger/radio/radio_relay.py --port 8083
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
