@@ -1,0 +1,88 @@
+<Page
+    x:Class="RWorldRadio.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:RWorldRadio.Models"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <!-- Two full-screen panes rather than the desktop's side-by-side lists: on a
+         phone there is no room for both, so picking a country navigates to its
+         stations and the hardware back button returns. -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="SearchBox"
+                 Grid.Row="0"
+                 Margin="12,12,12,6"
+                 PlaceholderText="Search countries"
+                 TextChanged="OnSearchTextChanged"/>
+
+        <!-- ListView virtualises by default, which matters: one country has
+             ~6500 stations. -->
+        <ListView x:Name="CountryList"
+                  Grid.Row="1"
+                  Margin="0,0,0,0"
+                  SelectionMode="None"
+                  IsItemClickEnabled="True"
+                  ItemClick="OnCountryClick">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}"
+                               Margin="12,10"
+                               TextTrimming="CharacterEllipsis"
+                               Style="{ThemeResource BodyTextBlockStyle}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <ListView x:Name="StationList"
+                  Grid.Row="1"
+                  Visibility="Collapsed"
+                  SelectionMode="None"
+                  IsItemClickEnabled="True"
+                  ItemClick="OnStationClick">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:Station">
+                    <StackPanel Margin="12,8">
+                        <TextBlock Text="{x:Bind Name}"
+                                   TextTrimming="CharacterEllipsis"
+                                   Style="{ThemeResource BodyTextBlockStyle}"/>
+                        <TextBlock Text="{x:Bind CodecBitrate}"
+                                   Opacity="0.6"
+                                   Style="{ThemeResource CaptionTextBlockStyle}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- Now-playing bar, always visible so playback can be stopped from
+             either pane. -->
+        <Grid Grid.Row="2" Background="{ThemeResource SystemControlBackgroundListLowBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="StopButton"
+                    Grid.Column="0"
+                    Content="&#x25A0;"
+                    Margin="8,6"
+                    Visibility="Collapsed"
+                    Click="OnStopClick"/>
+
+            <StackPanel Grid.Column="1" Margin="8,6" VerticalAlignment="Center">
+                <TextBlock x:Name="NowPlayingText"
+                           Text="Stopped"
+                           TextTrimming="CharacterEllipsis"
+                           Style="{ThemeResource BodyTextBlockStyle}"/>
+                <TextBlock x:Name="StatusText"
+                           Opacity="0.6"
+                           Style="{ThemeResource CaptionTextBlockStyle}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

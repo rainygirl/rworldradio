@@ -1,0 +1,19 @@
+<!--
+  Runtime Directives for the .NET Native compiler (Release builds only).
+
+  .NET Native strips code it cannot prove is used, which breaks anything reached
+  by reflection. Most of this app is safe - x:Bind in the station template is
+  compiled, not reflective - but the country list uses a plain {Binding}, and
+  ObservableCollection change notification goes through the framework, so the
+  types below are kept explicitly.
+
+  Without this file the build only warns (ILT0027), and the failure shows up at
+  runtime on the phone rather than at build time, which is exactly the kind of
+  bug that is expensive to chase on a sideloaded device.
+-->
+<Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
+  <Application>
+    <!-- The app's own types: needed for XAML data binding and x:Bind fallbacks. -->
+    <Assembly Name="*Application*" Dynamic="Required All" />
+  </Application>
+</Directives>
