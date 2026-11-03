@@ -553,6 +553,17 @@ five are near-literal translations and their tests were translated with them, so
 a new upstream test case can usually be pasted into `tests/test_core.c` with only
 syntax changes.
 
+## The prebuilt dmg
+
+`dist/RWorldRadio-tiger.dmg` (UDZO, CRC32 checksums - a format Tiger's
+DiskImages mounts) was made on the iMac G4 with `hdiutil create -srcfolder`
+from `~/rworldradio-macppc/build/RWorldRadio.app`, with an `Applications`
+symlink beside the app. That bundle was compiled on 2026-08-16 from sources
+byte-identical to the current `src/` (only the Makefile's `DATASET_SRC` default
+and `tools/mkdataset.py`'s usage comment changed since, neither of which is in
+the binary), with the same station list that is now `../shared/data`. Rebuild
+it on the G4 and replace the dmg whenever `src/` or the dataset changes.
+
 ## Checking the build without a G4
 
 ```sh

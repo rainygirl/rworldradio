@@ -19,6 +19,16 @@ Tiger가 설치된 PowerPC Mac용 인터넷 라디오 플레이어입니다. Car
 
 `-mcpu=7450`으로 빌드하므로 G3에서는 실행되지 않고, Intel 슬라이스도 없습니다.
 
+## 미리 빌드한 앱 설치
+
+[`dist/RWorldRadio-tiger.dmg`](dist/RWorldRadio-tiger.dmg)에 완성된
+`RWorldRadio.app`이 들어 있습니다 (여기 소스로 iMac G4의 Xcode 2.5에서 빌드).
+이미지를 열고 **RWorldRadio**를 옆에 보이는 **Applications** 폴더로 끌어다 놓으면
+됩니다. 번들은 자체 완결적이라(방송국 목록과 CA 저장소가 안에 있음) 나중에
+휴지통에 넣으면 전부 지워집니다.
+
+아래는 직접 빌드할 때만 필요합니다.
+
 ## 머신 두 대로 빌드
 
 Tiger는 빌드 입력을 스스로 준비하지 못합니다. Tiger의 `curl`은 요즘 TLS 호스트에

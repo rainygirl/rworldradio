@@ -20,6 +20,16 @@ CoreAudio, with a bundled TLS stack and decoders.
 The build targets `-mcpu=7450`, so it will not run on a G3, and it has no Intel
 slice.
 
+## Installing the prebuilt app
+
+[`dist/RWorldRadio-tiger.dmg`](dist/RWorldRadio-tiger.dmg) holds a ready-made
+`RWorldRadio.app` (built on an iMac G4 with Xcode 2.5 from the sources here).
+Open the image and drag **RWorldRadio** to the **Applications** folder shown
+next to it. The bundle is self-contained - the station list and the CA store
+are inside it - so dragging it to the Trash later removes everything.
+
+Everything below is only for building it yourself.
+
 ## Two-machine build
 
 Tiger cannot prepare its own build inputs. Its `curl` cannot reach a modern TLS
