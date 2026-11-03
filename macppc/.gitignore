@@ -1,0 +1,32 @@
+build/
+# tools/ppc-verify/verify.sh caches its sysroot and .debs under build/, so
+# rm -rf build throws away a few hundred MB it will re-download. Move it with
+# RWR_PPC_WORK=... if that matters.
+
+# Generated at build time from a JSON dataset and a PEM CA bundle - see
+# tools/mkdataset.py and tools/mkcastore.py. Together they are about 5 MB.
+data/stations.dat
+data/cacert.der
+
+# Built from the PNGs beside it by packaging/make-icns.py, which needs nothing
+# outside this checkout - so there is no reason to carry a copy that can go
+# stale against the artwork.
+packaging/rworldradio.icns
+packaging/icon_png.h
+
+# Unmodified upstream tarballs and their unpacked trees; tools/fetch-vendor.sh
+# puts them here. See vendor/README.md.
+vendor/*.tar.gz
+vendor/*.tar.bz2
+vendor/*.part
+vendor/mbedtls-*/
+vendor/libmad-*/
+vendor/faad2-*/
+
+# Engineering notes, kept local and not published.
+AGENTS.md
+
+.DS_Store
+*.o
+*.a
+__pycache__/

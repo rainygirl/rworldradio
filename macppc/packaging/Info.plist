@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>R World Radio</string>
+    <key>CFBundleDisplayName</key>
+    <string>R World Radio</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.rainygirl.rworldradio</string>
+    <key>CFBundleExecutable</key>
+    <string>rworldradio</string>
+    <key>CFBundleVersion</key>
+    <string>1.0.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleSignature</key>
+    <string>????</string>
+    <key>CFBundleIconFile</key>
+    <string>rworldradio.icns</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+
+    <!-- PowerPC only. There is no Intel slice: Tiger for Intel shipped a year
+         after this port's target and every machine it is meant for is a G4. -->
+    <key>LSMinimumSystemVersion</key>
+    <string>10.4</string>
+    <key>LSRequiresCarbon</key>
+    <true/>
+    <key>LSArchitecturePriority</key>
+    <array>
+        <string>ppc</string>
+    </array>
+
+    <!-- Without this the window opens behind whatever launched it and the menu
+         bar is never installed, because the process is not registered with the
+         window server as a foreground application. -->
+    <key>LSUIElement</key>
+    <false/>
+
+    <key>NSHumanReadableCopyright</key>
+    <string>MIT licensed. Bundles libmad and faad2 (GPL-2.0) and mbedTLS (Apache-2.0).</string>
+</dict>
+</plist>
