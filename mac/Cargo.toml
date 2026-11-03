@@ -1,0 +1,54 @@
+[package]
+name = "rworldradio-mac"
+version = "1.0.0"
+edition = "2021"
+# Set by the shared crate's dependency tree, not by this code - see core/.
+rust-version = "1.88"
+description = "Internet radio player - macOS port of the Haiku R World Radio app"
+license = "MIT"
+
+[[bin]]
+name = "rworldradio"
+path = "src/main.rs"
+
+[dependencies]
+# The whole implementation - dataset parsing, HTTP, HLS, the TS demuxer, the ADTS
+# normalizer, decoding, audio output and the UI - is shared with the Linux port and
+# vendored in core/ (see core/VENDORED.md). Only what is genuinely
+# platform-specific lives in this crate: where `data/` is looked for, which system
+# fonts to fall back to, the media-key wiring, and the window/app-bundle setup.
+# `default-features = false` drops the Linux windowing features, which are inert on
+# macOS but shouldn't be requested here.
+rworldradio = { path = "core", default-features = false }
+
+eframe = { version = "0.32", default-features = false, features = [
+    "glow",
+    "default_fonts",
+    "accesskit",
+] }
+egui = "0.32"
+
+# The play/pause media key (F8) is not a key event: macOS delivers it to whichever
+# app last registered with the Now Playing system, through MediaPlayer's
+# MPRemoteCommandCenter. See src/mediakeys.rs.
+objc2 = { version = "0.6", default-features = false, features = ["std"] }
+block2 = "0.6"
+objc2-foundation = { version = "0.3", default-features = false, features = [
+    "std",
+    "NSString",
+    "NSDictionary",
+    "NSValue",
+] }
+objc2-media-player = { version = "0.3", default-features = false, features = [
+    "std",
+    "block2",
+    "MPMediaItem",
+    "MPNowPlayingInfoCenter",
+    "MPRemoteCommand",
+    "MPRemoteCommandCenter",
+    "MPRemoteCommandEvent",
+] }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
