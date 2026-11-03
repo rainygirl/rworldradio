@@ -38,8 +38,7 @@ the station list and the code the Rust ports share live in [`shared/`](shared).
 
 ### Mac OS 9
 
-No screenshot yet. The Mac OS 9 app is a classic Toolbox window with a search
-box, the country list, the station list and KEXP / Stop / Play buttons.
+![R World Radio on Mac OS 9](os9/screenshot.png)
 
 ### Windows 10 Mobile
 

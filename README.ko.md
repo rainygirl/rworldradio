@@ -39,8 +39,7 @@
 
 ### Mac OS 9
 
-아직 스크린샷이 없습니다. Mac OS 9 앱은 검색 상자, 국가 목록, 방송국 목록, KEXP /
-Stop / Play 버튼이 있는 클래식 Toolbox 창입니다.
+![Mac OS 9에서 실행한 R World Radio](os9/screenshot.png)
 
 ### Windows 10 Mobile
 

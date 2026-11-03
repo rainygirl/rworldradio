@@ -59,6 +59,9 @@ country and station lists, Korean search results, an AAC station (4MBS Classic
 FM) transcoded to MP3, the 502 path for an expired URL, switching back to KEXP,
 and playing together with a full-screen screen saver.
 
+`screenshot.png` was taken on the iMac G4 running Mac OS 9.2.2 through Home SSH
+(`screenshot`) on 2026-11-03, with KEXP playing and Argentina selected.
+
 `dist/RWorldRadio.bin` is the MacBinary that Retro68 produced from the current
 `mac/` sources on 2026-11-03 (the same build that was tested above). Rebuild
 and replace it whenever `mac/` changes.

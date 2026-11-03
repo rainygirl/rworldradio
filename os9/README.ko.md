@@ -2,6 +2,8 @@
 
 [English](README.md) · 한국어
 
+![Mac OS 9에서 실행한 R World Radio](screenshot.png)
+
 Mac OS 9(PowerPC)용 인터넷 라디오입니다. 두 부분으로 되어 있습니다. Mac의
 클래식 Toolbox 앱과, 같은 네트워크의 Linux 머신에서 방송국을 받아 변환해 주는
 작은 릴레이입니다 (Mac OS 9에는 요즘 TLS, AAC, HLS가 없습니다).

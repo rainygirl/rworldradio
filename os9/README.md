@@ -2,6 +2,8 @@
 
 English · [한국어](README.ko.md)
 
+![R World Radio on Mac OS 9](screenshot.png)
+
 Internet radio for Mac OS 9 (PowerPC). It is two parts: a classic Toolbox app on
 the Mac, and a small relay on a Linux machine on the same network that fetches
 and transcodes the stations for it (Mac OS 9 has no modern TLS, AAC or HLS).
