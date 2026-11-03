@@ -1,0 +1,126 @@
+#include "NetworkFetch.h"
+
+#include "HttpClient.h"
+
+#include <cstdio>
+#include <cstring>
+
+#include <DataIO.h>
+#include <Errors.h>
+#include <HttpResult.h>
+#include <OS.h>
+#include <Url.h>
+#include <UrlProtocolListener.h>
+#include <UrlProtocolRoster.h>
+#include <UrlRequest.h>
+
+// See the matching comment in RadioPlayer.cpp: these classes live in
+// BPrivate::Network on Haiku builds where the classic Url Kit was moved to
+// a private header.
+using namespace BPrivate::Network;
+
+namespace {
+
+// BUrlRequest writes the response body directly into whatever BDataIO is
+// passed as its `output` - there is no per-chunk listener callback on this
+// API - so this just accumulates it in memory.
+class BufferSink : public BDataIO {
+public:
+	std::string body;
+
+	ssize_t Write(const void* buffer, size_t size)
+	{
+		body.append(static_cast<const char*>(buffer), size);
+		return static_cast<ssize_t>(size);
+	}
+
+	ssize_t Read(void*, size_t)
+	{
+		return B_NOT_ALLOWED;
+	}
+};
+
+} // namespace
+
+namespace NetworkFetch {
+
+Result Get(const std::string& url)
+{
+	Result result;
+
+#ifdef HAIKU_HAS_OPENSSL
+	// On builds where OpenSSL is available, route https:// through it
+	// directly rather than through BUrlRequest: this SDK's Network Kit
+	// (libnetservices) has zero SSL symbols linked in - confirmed by hand,
+	// same root cause documented in HttpAudioIO.h - so BUrlRequest can't do
+	// https at all here. http:// still goes through BUrlRequest below (it
+	// already handles redirects and chunked/close framing correctly there,
+	// and reuses the Kit's own connection handling rather than bypassing
+	// it unnecessarily). GetBody() follows redirects itself, including a
+	// redirect that crosses from http to https or back.
+	if (strncmp(url.c_str(), "https://", 8) == 0) {
+		std::string body;
+		int status = 0;
+		std::string error;
+		bool ok = HttpClient::GetBody(url, body, status, error);
+		result.httpStatus = status;
+		result.body = body;
+		result.ok = ok && !body.empty();
+		result.error = ok ? std::string() : error;
+		return result;
+	}
+#endif
+
+	// Some Haiku SDKs (the legacy x86/gcc2 secondary arch) declare BOTH
+	// BUrl(const char*, bool = true) and BUrl(const char*), making a
+	// single-argument call ambiguous - others (the primary x86_64/gcc13
+	// SDK) only have the single-argument form, where a second bool argument
+	// is a hard error. HAIKU_BURL_HAS_BOOL_CTOR is set by the Makefile
+	// per-SDK - see its comment.
+#ifdef HAIKU_BURL_HAS_BOOL_CTOR
+	BUrl parsedUrl(url.c_str(), true);
+#else
+	BUrl parsedUrl(url.c_str());
+#endif
+	if (!parsedUrl.IsValid()) {
+		result.error = "invalid URL";
+		return result;
+	}
+
+	BufferSink sink;
+	// BHttpRequest's constructor is private - BUrlProtocolRoster::MakeRequest
+	// is the only way to create a request, returned as the base BUrlRequest.
+	BUrlRequest* request = BUrlProtocolRoster::MakeRequest(parsedUrl, &sink);
+	if (request == NULL) {
+		result.error = "failed to create request";
+		return result;
+	}
+
+	thread_id requestThread = request->Run();
+	if (requestThread < 0) {
+		result.error = "failed to start request";
+		delete request;
+		return result;
+	}
+
+	status_t exitValue = B_OK;
+	wait_for_thread(requestThread, &exitValue);
+
+	const BHttpResult& httpResult
+		= static_cast<const BHttpResult&>(request->Result());
+	result.httpStatus = httpResult.StatusCode();
+	result.body = sink.body;
+	result.ok = (result.httpStatus >= 200 && result.httpStatus < 300)
+		&& !result.body.empty();
+
+	if (!result.ok && result.error.empty()) {
+		char status[16];
+		snprintf(status, sizeof(status), "%d", result.httpStatus);
+		result.error = "HTTP status " + std::string(status);
+	}
+
+	delete request;
+	return result;
+}
+
+} // namespace NetworkFetch

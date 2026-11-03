@@ -1,0 +1,41 @@
+resource app_signature "application/x-vnd.RWorldRadio-Radio";
+
+resource app_name_catalog_entry "x-vnd.RWorldRadio-Radio:System name:RWorldRadio";
+
+resource app_version {
+	major	= 1,
+	middle	= 0,
+	minor	= 0,
+
+	/* 0 = development	1 = alpha		2 = beta
+	   3 = gamma		4 = golden master	5 = final */
+	variety	 = 0,
+	internal = 0,
+
+	short_info = "R World Radio",
+	long_info = "R World Radio - internet radio player for Haiku, "
+		"streaming stations from radio-browser and TuneIn"
+};
+
+/*
+ * A flat-shaded radio drawn as an isometric box - top, left and right faces
+ * meeting at the near corner, dial and knobs on one flank, speaker grille on
+ * the other, antenna leaning out of the top. That is the axis the rest of the
+ * R apps sit on, and the axis BeOS icons use.
+ *
+ * Do not edit the bytes below. They come from tools/make_icon.py, which
+ * rewrites this block in place; change the shape coordinates and colours
+ * there and re-run it. The script only guarantees well-formed HVIF - whether
+ * the artwork reads is a question for Tracker at 16 and 32 px.
+ */
+resource vector_icon {
+	$"6E6369660801D6B27AFF01A2875CFF016F5C3FFF01B0B6BEFF013A322AFF0196"
+	$"7E5CFF01F4EEDCFF01C63E2EFF0F0A043D2F4030282224210A0426384045405A"
+	$"264D0A045A384045405A5A4D0A04402B5A38404526380A04573D4A434A52574B"
+	$"0A0E304B304D2F4D2E4D2C4D2B4B2A4A29482A472B462C462E472F48304A0A0E"
+	$"3A5039513852375235513450334E334D334B344B354B374B384D394E0A04563D"
+	$"4B434B44563F0A0456404B464B4756420A0456434B494B4A56450A0456464B4B"
+	$"4B4D56480A0456494B4E4B50564A0A043B334A3A453D36360A04293C3D473D4D"
+	$"29430A043643374437493649080A030100000A010101000A020102000A000103"
+	$"000A0403040506000A05060708090A0B0C000A06010D000A07010E00"
+};
