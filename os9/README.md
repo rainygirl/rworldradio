@@ -30,14 +30,17 @@ The service file assumes the checkout is at
 Requirements: Mac OS 9 with QuickTime 6, URL Access and Open Transport; a 24 MB
 memory partition (12 MB minimum).
 
-Build on any machine with Docker (Retro68 runs in a container):
+A prebuilt app is in [`dist/RWorldRadio.bin`](dist/RWorldRadio.bin) (MacBinary,
+built from the `mac/` sources here). Copy it to the Mac and expand it with
+StuffIt Expander (or any MacBinary tool that keeps the resource fork); the
+result is the `RWorldRadio` application.
+
+To build it yourself instead, on any machine with Docker (Retro68 runs in a
+container):
 
 ```sh
 make            # -> build/mac/RWorldRadio.bin (MacBinary)
 ```
-
-Copy `RWorldRadio.bin` to the Mac and expand it with StuffIt Expander (or any
-MacBinary tool that keeps the resource fork).
 
 Next to the app, create a text file `R WorldRadio Settings` (CR line endings)
 with the relay's address:

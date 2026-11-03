@@ -59,6 +59,10 @@ country and station lists, Korean search results, an AAC station (4MBS Classic
 FM) transcoded to MP3, the 502 path for an expired URL, switching back to KEXP,
 and playing together with a full-screen screen saver.
 
+`dist/RWorldRadio.bin` is the MacBinary that Retro68 produced from the current
+`mac/` sources on 2026-11-03 (the same build that was tested above). Rebuild
+and replace it whenever `mac/` changes.
+
 Not re-tested after the move into this repository: the Retro68 build needs
 Docker, and the relay was only checked to load the dataset from its new default
 path.

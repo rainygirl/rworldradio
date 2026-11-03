@@ -16,7 +16,7 @@
 | [`linux/`](linux) | Linux 데스크톱 (X11 / XWayland) | [linux/README.ko.md](linux/README.ko.md) |
 | [`mac/`](mac) | macOS 10.15 이상, Apple silicon과 Intel | [mac/README.ko.md](mac/README.ko.md) |
 | [`macppc/`](macppc) | PowerPC G4의 Mac OS X 10.4 Tiger | [macppc/README.ko.md](macppc/README.ko.md) |
-| [`os9/`](os9) | PowerPC의 Mac OS 9, Linux 머신의 릴레이와 함께 | [os9/README.ko.md](os9/README.ko.md) |
+| [`os9/`](os9) | PowerPC의 Mac OS 9, Linux 머신의 릴레이와 함께 | [os9/README.ko.md](os9/README.ko.md) - 미리 빌드한 앱은 `os9/dist/` |
 | [`winphone/`](winphone) | Windows 10 Mobile (Windows Phone 10) | [winphone/README.ko.md](winphone/README.ko.md) |
 
 ## 스크린샷

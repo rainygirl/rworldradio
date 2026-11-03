@@ -29,14 +29,15 @@ sudo systemctl enable --now radio-relay
 요구 사항: QuickTime 6, URL Access, Open Transport가 있는 Mac OS 9. 메모리 파티션
 24 MB (최소 12 MB).
 
-Docker가 있는 아무 머신에서 빌드합니다 (Retro68이 컨테이너에서 돕니다).
+미리 빌드한 앱이 [`dist/RWorldRadio.bin`](dist/RWorldRadio.bin)에 있습니다
+(MacBinary, 여기 `mac/` 소스로 빌드). Mac으로 복사해 StuffIt Expander(또는 리소스
+포크를 보존하는 MacBinary 도구)로 풀면 `RWorldRadio` 응용 프로그램이 나옵니다.
+
+직접 빌드하려면 Docker가 있는 아무 머신에서 (Retro68이 컨테이너에서 돕니다):
 
 ```sh
 make            # -> build/mac/RWorldRadio.bin (MacBinary)
 ```
-
-`RWorldRadio.bin`을 Mac으로 복사해 StuffIt Expander(또는 리소스 포크를 보존하는
-MacBinary 도구)로 풉니다.
 
 앱 옆에 릴레이 주소를 적은 텍스트 파일 `R WorldRadio Settings`(CR 줄 끝)를
 만듭니다.

@@ -15,7 +15,7 @@ the station list and the code the Rust ports share live in [`shared/`](shared).
 | [`linux/`](linux) | Linux desktops (X11 / XWayland) | [linux/README.md](linux/README.md) |
 | [`mac/`](mac) | macOS 10.15 or newer, Apple silicon and Intel | [mac/README.md](mac/README.md) |
 | [`macppc/`](macppc) | Mac OS X 10.4 Tiger on a PowerPC G4 | [macppc/README.md](macppc/README.md) |
-| [`os9/`](os9) | Mac OS 9 on PowerPC, with a relay on a Linux box | [os9/README.md](os9/README.md) |
+| [`os9/`](os9) | Mac OS 9 on PowerPC, with a relay on a Linux box | [os9/README.md](os9/README.md) - prebuilt app in `os9/dist/` |
 | [`winphone/`](winphone) | Windows 10 Mobile (Windows Phone 10) | [winphone/README.md](winphone/README.md) |
 
 ## Screenshots
